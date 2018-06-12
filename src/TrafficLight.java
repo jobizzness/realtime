@@ -14,8 +14,8 @@ public class TrafficLight extends RealtimeThread {
 	
 	public TrafficLight(int i, Intersection position) {
 		super (
-				new PriorityParameters(PriorityScheduler.instance().getMaxPriority()), 
-				new PeriodicParameters(new RelativeTime((1000 * i),0))
+				new PriorityParameters(PriorityScheduler.instance().getMinPriority()), 
+				new PeriodicParameters(new RelativeTime((5000 * i),0))
 			);
 		
 		this.id = i;

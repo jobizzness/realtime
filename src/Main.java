@@ -1,10 +1,12 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
 
 	public ArrayList<Track> tracks = new ArrayList<Track>();
 	public ArrayList<TrafficLight> trafficLights = new ArrayList<TrafficLight>();
 	public ArrayList<Intersection> intersections = new ArrayList<Intersection>();
+	public ArrayList<Train> trains = new ArrayList<Train>();
 	
 	/**
 	 * Instantiate the class and call boot.
@@ -36,23 +38,48 @@ public class Main {
 		this.intersections.add(new Intersection("Intersection-F"));
 	}
 
-	private void init() {
-		// I have the trains and the tracks and the traffic lights
-		// Now i want to position the trains and ask them to start
-		// moving
-		
-	}
-
 	/**
-	 * create all the tracks
-	 * and add them to a list
+	 * We are creating a track and placing the intersections
+	 * intesections are in a list, so this means a track has many intersections
 	 */
 	private void createTracks() {
-		this.tracks.add(new Track("EastWestA", 100.00));
-		this.tracks.add(new Track("EastWestB", 100.00));
-		this.tracks.add(new Track("NorthSouthA", 80.00));
-		this.tracks.add(new Track("NorthSouthB", 80.00));
-		this.tracks.add(new Track("NorthSouthC", 80.00));
+		
+		//Track East West A
+		// And its intersections
+		ArrayList<Intersection> intersectionsEastWestA = new ArrayList<Intersection>();
+		intersectionsEastWestA.add(this.intersections.get(0));
+		intersectionsEastWestA.add(this.intersections.get(1));
+		intersectionsEastWestA.add(this.intersections.get(2));
+		Track trackEastWestA = new Track("EastWestA", 100.00, intersectionsEastWestA);
+		trackEastWestA.setIntersectionDistance(
+				new ArrayList<Double>(Arrays.asList(20.0, 40.0, 60.0))
+		);
+		this.tracks.add(trackEastWestA);
+		
+		
+		//Track East West A
+		// And its intersections
+		ArrayList<Intersection> intersectionsEastWestB = new ArrayList<Intersection>();
+		intersectionsEastWestB.add(this.intersections.get(3));
+		intersectionsEastWestB.add(this.intersections.get(4));
+		intersectionsEastWestB.add(this.intersections.get(5));
+		this.tracks.add(new Track("EastWestB", 100.00, intersectionsEastWestB));
+		
+		
+		ArrayList<Intersection> intersectionsNorthSouthA = new ArrayList<Intersection>();
+		intersectionsNorthSouthA.add(this.intersections.get(2));
+		intersectionsNorthSouthA.add(this.intersections.get(5));
+		this.tracks.add(new Track("NorthSouthA", 80.00, intersectionsNorthSouthA));
+		
+		ArrayList<Intersection> intersectionsENorthSouthB = new ArrayList<Intersection>();
+		intersectionsENorthSouthB.add(this.intersections.get(1));
+		intersectionsENorthSouthB.add(this.intersections.get(4));
+		this.tracks.add(new Track("NorthSouthB", 80.00, intersectionsENorthSouthB));
+		
+		ArrayList<Intersection> intersectionsNorthSouthC = new ArrayList<Intersection>();
+		intersectionsNorthSouthC.add(this.intersections.get(0));
+		intersectionsNorthSouthC.add(this.intersections.get(3));
+		this.tracks.add(new Track("NorthSouthC", 80.00, intersectionsNorthSouthC));
 	}
 	
 	/**
@@ -75,8 +102,16 @@ public class Main {
 	 */
 	private void createTrains(ArrayList<Track> tracks, ArrayList<TrafficLight> trafficLights) {
 		// We can stimulate many trains 
-		Train train = new Train(1, this.tracks.get(0), "EastToWest");
-		train.start();
+		// 2 miles per second
+		this.trains.add(new Train(1, this.tracks.get(0), "EastToWest", 2));
+	}
+	
+	/**
+	 * Make the trains start moving
+	 * we can release one every 20 seconds
+	 */
+	private void init() {
+		this.trains.get(0).start();
 	}
 
 	
