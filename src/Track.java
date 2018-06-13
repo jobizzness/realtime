@@ -21,9 +21,33 @@ public class Track {
 		this.intersectionDistances = intersectionDistances;
 	}
 	
-	public boolean checkNearIntersection(double coveredDistance) {
-		// TODO Auto-generated method stub
-		return false;
+	public int checkNearIntersection(double coveredDistance) {
+		//Loop through all the intersections
+		for (int i = 0; i < this.intersections.size(); i++) {
+		    Intersection intersection = this.intersections.get(i);
+		   double intersectiondistance = this.intersectionDistances.get(i);
+		   
+		   // Are we there yet?
+		   if( coveredDistance + 4  == intersectiondistance) {
+			   return i;
+		   }
+		}
+		return -1; //another way of saying false
+	}
+	
+	public int checkPassedIntersection(double coveredDistance) {
+		//Loop through all the intersections
+		for (int i = 0; i < this.intersections.size(); i++) {
+		    Intersection intersection = this.intersections.get(i);
+		   double intersectiondistance = this.intersectionDistances.get(i);
+		   
+		   // Are we there yet?
+		   if( coveredDistance == intersectiondistance + 4) {
+			  
+			   return i;
+		   }
+		}
+		return -1; //another way of saying false
 	}
 
 

@@ -22,8 +22,8 @@ public class Main {
 	 * creates the tracks, trains and traffic lights
 	 */
 	public void boot() {
-		this.createTracks();
 		this.createIntersections();
+		this.createTracks();
 		this.createTrafficLights();
 		this.createTrains(this.tracks, this.trafficLights);
 		this.init();
@@ -57,29 +57,50 @@ public class Main {
 		this.tracks.add(trackEastWestA);
 		
 		
-		//Track East West A
+		//Track East West B
 		// And its intersections
 		ArrayList<Intersection> intersectionsEastWestB = new ArrayList<Intersection>();
 		intersectionsEastWestB.add(this.intersections.get(3));
 		intersectionsEastWestB.add(this.intersections.get(4));
 		intersectionsEastWestB.add(this.intersections.get(5));
-		this.tracks.add(new Track("EastWestB", 100.00, intersectionsEastWestB));
+		Track trackEastWestB = new Track("EastWestB", 100.00, intersectionsEastWestB);
+		trackEastWestB.setIntersectionDistance(
+				new ArrayList<Double>(Arrays.asList(20.0, 40.0, 60.0))
+		);
+		this.tracks.add(trackEastWestB);
 		
-		
+		//Track north South A
+		// And its intersections
 		ArrayList<Intersection> intersectionsNorthSouthA = new ArrayList<Intersection>();
 		intersectionsNorthSouthA.add(this.intersections.get(2));
 		intersectionsNorthSouthA.add(this.intersections.get(5));
-		this.tracks.add(new Track("NorthSouthA", 80.00, intersectionsNorthSouthA));
+		Track trackNorthSouthA = new Track("NorthSouthA", 100.00, intersectionsNorthSouthA);
+		trackNorthSouthA.setIntersectionDistance(
+				new ArrayList<Double>(Arrays.asList(20.0, 60.0))
+		);
+		this.tracks.add(trackNorthSouthA);
 		
-		ArrayList<Intersection> intersectionsENorthSouthB = new ArrayList<Intersection>();
-		intersectionsENorthSouthB.add(this.intersections.get(1));
-		intersectionsENorthSouthB.add(this.intersections.get(4));
-		this.tracks.add(new Track("NorthSouthB", 80.00, intersectionsENorthSouthB));
+		//Track north South B
+		// And its intersections
+		ArrayList<Intersection> intersectionsNorthSouthB = new ArrayList<Intersection>();
+		intersectionsNorthSouthB.add(this.intersections.get(1));
+		intersectionsNorthSouthB.add(this.intersections.get(4));
+		Track trackNorthSouthB = new Track("NorthSouthB", 100.00, intersectionsNorthSouthB);
+		trackNorthSouthB.setIntersectionDistance(
+				new ArrayList<Double>(Arrays.asList(20.0, 60.0))
+		);
+		this.tracks.add(trackNorthSouthB);
 		
+		//Track north South C
+		// And its intersections
 		ArrayList<Intersection> intersectionsNorthSouthC = new ArrayList<Intersection>();
 		intersectionsNorthSouthC.add(this.intersections.get(0));
 		intersectionsNorthSouthC.add(this.intersections.get(3));
-		this.tracks.add(new Track("NorthSouthC", 80.00, intersectionsNorthSouthC));
+		Track trackNorthSouthC = new Track("NorthSouthC", 100.00, intersectionsNorthSouthC);
+		trackNorthSouthC.setIntersectionDistance(
+				new ArrayList<Double>(Arrays.asList(20.0, 60.0))
+		);
+		this.tracks.add(trackNorthSouthC);
 	}
 	
 	/**

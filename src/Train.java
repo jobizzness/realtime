@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.PriorityScheduler;
@@ -11,6 +13,7 @@ public class Train extends RealtimeThread{
 	public double speed;
 	public double coveredDistance;
 	public int id;
+	public ArrayList<Intersection> lockedIntersections = new ArrayList<Intersection>();
 	
 	/**
 	 * Constructor of the train class
@@ -69,10 +72,13 @@ public class Train extends RealtimeThread{
 			//we will now be delayed so we need to handle this accordingly
 		}
 		
-		if(nearIntersection()) {
-			acquireIntersection();
-			// This will pause the train if intersection is busy
+		int indexOfIntersection = nearIntersection();
+		if(indexOfIntersection != -1) {
+			System.out.println("woops we  are near an int");
+			acquireIntersection(indexOfIntersection);
 		}
+		
+		checkReleaseIntersection();
 		
 		moveForward();
 		
@@ -80,6 +86,18 @@ public class Train extends RealtimeThread{
 		
 	}
 	
+	private void checkReleaseIntersection() {
+		if(this.track.checkPassedIntersection(this.coveredDistance) != -1) {
+			for (int i = 0; i < this.lockedIntersections.size(); i++) {
+			    Intersection intersection = this.lockedIntersections.get(i);
+			    intersection.release();
+			    this.lockedIntersections.remove(i);
+			    System.out.println("LOL released");
+			}
+		}
+		
+	}
+
 	private boolean trafficLightIsRed() {
 		// TODO Auto-generated method stub
 		return false;
@@ -121,15 +139,24 @@ public class Train extends RealtimeThread{
 	 * 
 	 * @return
 	 */
-	private boolean nearIntersection() {
+	private int nearIntersection() {
 		return this.track.checkNearIntersection(this.coveredDistance);
 	}
 	
 	/**
+	 * @param indexOfIntersection 
 	 * 
 	 */
-	private void acquireIntersection() {
-		// TODO Auto-generated method stub
+	private void acquireIntersection(int indexOfIntersection) {
+		Intersection j1 = this.track.intersections.get(indexOfIntersection);
+		try {
+			j1.acquire();
+			this.lockedIntersections.add(j1);
+			System.out.println("we have locked this junction");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }
