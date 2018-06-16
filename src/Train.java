@@ -52,6 +52,8 @@ public class Train extends RealtimeThread{
 			if(!beforeMoveForward()) {
 				return;
 			};
+			
+			waitForNextPeriod();
 		}
 			
 	}
@@ -65,13 +67,16 @@ public class Train extends RealtimeThread{
 			return false;
 		}
 		
-		if(trafficLightIsRed()) {
-			//We need to pause and wait
-			// we may need to be notified when it changes
-			//We will log
-			//we will now be delayed so we need to handle this accordingly
+		if(trafficLightIsGreen()) {
+			System.out.println("Well light is green here");
+			lightIsGreen();
 		}
 		
+		return true;
+		
+	}
+	
+	public void lightIsGreen() {
 		int indexOfIntersection = nearIntersection();
 		if(indexOfIntersection != -1) {
 			System.out.println("woops we  are near an int");
@@ -82,10 +87,8 @@ public class Train extends RealtimeThread{
 		
 		moveForward();
 		
-		return true;
-		
 	}
-	
+
 	private void checkReleaseIntersection() {
 		if(this.track.checkPassedIntersection(this.coveredDistance) != -1) {
 			for (int i = 0; i < this.lockedIntersections.size(); i++) {
@@ -98,9 +101,17 @@ public class Train extends RealtimeThread{
 		
 	}
 
-	private boolean trafficLightIsRed() {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean trafficLightIsGreen() {
+
+		int indexOfIntersection = nearIntersection();
+		
+		if(indexOfIntersection == -1) {
+			return true;
+		}
+		
+		
+		Intersection intersection = this.track.intersections.get(indexOfIntersection);
+		return intersection.light().isGreen(this);
 	}
 
 	private boolean shouldStop() {
@@ -115,7 +126,7 @@ public class Train extends RealtimeThread{
 		// TODO Auto-generated method stub
 		
 		this.coveredDistance += this.speed; 
-		waitForNextPeriod();
+		
 		
 		this.afterMoveForward();
 	}

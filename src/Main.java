@@ -22,20 +22,20 @@ public class Main {
 	 * creates the tracks, trains and traffic lights
 	 */
 	public void boot() {
+		this.createTrafficLights();
 		this.createIntersections();
 		this.createTracks();
-		this.createTrafficLights();
 		this.createTrains(this.tracks, this.trafficLights);
 		this.init();
 	}
 	
 	private void createIntersections() {
-		this.intersections.add(new Intersection("Intersection-A"));
-		this.intersections.add(new Intersection("Intersection-B"));
-		this.intersections.add(new Intersection("Intersection-C"));
-		this.intersections.add(new Intersection("Intersection-D"));
-		this.intersections.add(new Intersection("Intersection-E"));
-		this.intersections.add(new Intersection("Intersection-F"));
+		this.intersections.add(new Intersection("Intersection-A", this.trafficLights.get(0)));
+		this.intersections.add(new Intersection("Intersection-B", this.trafficLights.get(1)));
+		this.intersections.add(new Intersection("Intersection-C", this.trafficLights.get(2)));
+		this.intersections.add(new Intersection("Intersection-D", this.trafficLights.get(3)));
+		this.intersections.add(new Intersection("Intersection-E", this.trafficLights.get(4)));
+		this.intersections.add(new Intersection("Intersection-F", this.trafficLights.get(5)));
 	}
 
 	/**
@@ -108,12 +108,12 @@ public class Main {
 	 * store them in an array
 	 */
 	private void createTrafficLights() {
-		this.trafficLights.add(new TrafficLight(1, this.intersections.get(0)));
-		this.trafficLights.add(new TrafficLight(2, this.intersections.get(1)));
-		this.trafficLights.add(new TrafficLight(3, this.intersections.get(2)));
-		this.trafficLights.add(new TrafficLight(4, this.intersections.get(3)));
-		this.trafficLights.add(new TrafficLight(5, this.intersections.get(4)));
-		this.trafficLights.add(new TrafficLight(6, this.intersections.get(5)));
+		this.trafficLights.add(new TrafficLight(1));
+		this.trafficLights.add(new TrafficLight(2));
+		this.trafficLights.add(new TrafficLight(3));
+		this.trafficLights.add(new TrafficLight(4));
+		this.trafficLights.add(new TrafficLight(5));
+		this.trafficLights.add(new TrafficLight(6));
 	}
 	
 	/**
