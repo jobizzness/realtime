@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+import javax.realtime.AsyncEvent;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.PriorityScheduler;
@@ -12,7 +13,8 @@ public class TrafficLight extends RealtimeThread {
 	public boolean[] directions = new boolean[4];
 	public int id;
 	public ArrayList<Train> waiters = new ArrayList<Train>();
-	
+	public AsyncEvent LightChangedEvent = new AsyncEvent();
+
 	
 	public TrafficLight(int i) {
 		super (
@@ -21,10 +23,7 @@ public class TrafficLight extends RealtimeThread {
 			);
 		
 		this.id = i;
-		this.directions[0] = false;
-		this.directions[1] = false;
-		this.directions[2] = false;
-		this.directions[3] = false;
+		this.turnAllLightsOff();
 		this.start();
 	}
 	
@@ -39,31 +38,15 @@ public class TrafficLight extends RealtimeThread {
 		
 		for(int i = 0; i<3; i++) {
 			this.CurrentActiveDirection = i;
+			this.turnAllLightsOff();
 			this.directions[i] = true;
-
+			LightChangedEvent.fire();
 			// i am going to tell all my listeners that my light has changed
-			this.dispatch(i);
 			
 			System.out.println("Light changed");
 			waitForNextPeriod();
 			
 		}
-	}
-	
-	private void dispatch(int direction) {
-		for (int i = 0; i < this.waiters.size(); i++) {
-			Train train = this.waiters.get(i);
-			if(train.direction == this.getDirectionName(direction)) {
-				train.lightIsGreen();
-				this.waiters.remove(i);
-			}
-		}
-		
-	}
-
-	public void switchLight(int i) {
-		this.turnAllLightsOff();
-		this.getCurrentActiveLight(i);
 	}
 	
 	public String getDirectionName(int i) {
@@ -100,8 +83,12 @@ public class TrafficLight extends RealtimeThread {
 
 	}
 	
+	//TODO
 	private void turnAllLightsOff() {
-
+		this.directions[0] = false;
+		this.directions[1] = false;
+		this.directions[2] = false;
+		this.directions[3] = false;
 		
 	}
 
@@ -113,9 +100,8 @@ public class TrafficLight extends RealtimeThread {
 			return true;
 		};
 		
-		System.out.println("Well light is red so waiting here");
-		this.waiters.add(train);
-		
+		LightChangedEvent.addHandler(train.lightChangedHandler);
+		System.out.println("Light is red so waiting");
 		return false;
 	}
 

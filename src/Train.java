@@ -13,6 +13,7 @@ public class Train extends RealtimeThread{
 	public double speed;
 	public double coveredDistance;
 	public int id;
+	public LightChangedHandler lightChangedHandler;
 	public ArrayList<Intersection> lockedIntersections = new ArrayList<Intersection>();
 	
 	/**
@@ -30,6 +31,10 @@ public class Train extends RealtimeThread{
 		this.direction = direction;
 		this.track = track;
 		this.speed = speed;
+		
+		this.lightChangedHandler = new LightChangedHandler(this);
+		
+		// ok create a hangler and pass me in
 	}
 
 	/**
@@ -61,7 +66,7 @@ public class Train extends RealtimeThread{
 	/**
 	 * 
 	 */
-	private boolean beforeMoveForward() {
+	public boolean beforeMoveForward() {
 		
 		if(shouldStop()) {
 			return false;

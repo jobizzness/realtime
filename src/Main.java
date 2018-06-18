@@ -124,7 +124,10 @@ public class Main {
 	private void createTrains(ArrayList<Track> tracks, ArrayList<TrafficLight> trafficLights) {
 		// We can stimulate many trains 
 		// 2 miles per second
-		this.trains.add(new Train(1, this.tracks.get(0), "EastToWest", 2));
+		double speed = 2;
+		this.trains.add(new Train(1, this.tracks.get(0), "EastToWest", speed));
+		this.trains.add(new Train(2, this.tracks.get(0), "WestToEast", speed));
+		this.trains.add(new Train(3, this.tracks.get(0), "SouthToNorth", speed));
 	}
 	
 	/**
@@ -133,6 +136,8 @@ public class Main {
 	 */
 	private void init() {
 		this.trains.get(0).start();
+		this.trains.get(1).start();
+		this.trains.get(2).start();
 	}
 
 	
