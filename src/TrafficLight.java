@@ -19,7 +19,7 @@ public class TrafficLight extends RealtimeThread {
 	public TrafficLight(int i) {
 		super (
 				new PriorityParameters(PriorityScheduler.instance().getMinPriority()), 
-				new PeriodicParameters(new RelativeTime((5000 * i),0))
+				new PeriodicParameters(new RelativeTime((10000 * i),0))
 			);
 		
 		this.id = i;
@@ -40,10 +40,18 @@ public class TrafficLight extends RealtimeThread {
 			this.CurrentActiveDirection = i;
 			this.turnAllLightsOff();
 			this.directions[i] = true;
-			LightChangedEvent.fire();
-			// i am going to tell all my listeners that my light has changed
 			
-			System.out.println("Light changed");
+			// i am going to tell all my listeners that my light has changed
+			LightChangedEvent.fire();
+			
+			
+			System.out.println(
+					"----------------------------------------\n"+
+					"Traffic Light with id:" + 
+					this.id + " at the (" + 
+					this.getDirectionName(i) + ") is (green)"
+			);
+					
 			waitForNextPeriod();
 			
 		}
@@ -101,7 +109,11 @@ public class TrafficLight extends RealtimeThread {
 		};
 		
 		LightChangedEvent.addHandler(train.lightChangedHandler);
-		System.out.println("Light is red so waiting");
+		System.out.println(
+				"----------------------------------------\n"+
+				"Traffic Light with id: " + this.id + " is red => Train with id: " + train.id
+				+ " is waiting..."
+		);
 		return false;
 	}
 

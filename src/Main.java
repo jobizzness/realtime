@@ -26,7 +26,6 @@ public class Main {
 		this.createIntersections();
 		this.createTracks();
 		this.createTrains(this.tracks, this.trafficLights);
-		this.init();
 	}
 	
 	private void createIntersections() {
@@ -125,21 +124,25 @@ public class Main {
 		// We can stimulate many trains 
 		// 2 miles per second
 		double speed = 2;
+		
 		this.trains.add(new Train(1, this.tracks.get(0), "EastToWest", speed));
-		this.trains.add(new Train(2, this.tracks.get(0), "WestToEast", speed));
-		this.trains.add(new Train(3, this.tracks.get(0), "SouthToNorth", speed));
+//		for(int i=1; i<20; i++) {
+//			this.trains.add(new Train(1*i, this.tracks.get(0), "EastToWest", speed));
+//			this.trains.add(new Train(2*i, this.tracks.get(1), "WestToEast", speed));
+//			this.trains.add(new Train(3*i, this.tracks.get(2), "SouthToNorth", speed));
+//			this.trains.add(new Train(4*i, this.tracks.get(3), "NOrthToSouth", speed));
+//			this.trains.add(new Train(5*i, this.tracks.get(4), "SouthToNorth", speed));
+//			
+//			//Sleep for a while
+//			try {
+//				Thread.sleep(30000);
+//				System.out.println("Relasing next batch of trains => ");
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+		
 	}
-	
-	/**
-	 * Make the trains start moving
-	 * we can release one every 20 seconds
-	 */
-	private void init() {
-		this.trains.get(0).start();
-		this.trains.get(1).start();
-		this.trains.get(2).start();
-	}
-
 	
 	
 	

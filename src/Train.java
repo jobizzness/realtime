@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.Date;
 
+import javax.realtime.AsyncEvent;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.PriorityScheduler;
@@ -15,12 +17,15 @@ public class Train extends RealtimeThread{
 	public int id;
 	public LightChangedHandler lightChangedHandler;
 	public ArrayList<Intersection> lockedIntersections = new ArrayList<Intersection>();
+	public AsyncEvent DeadlineMissed = new AsyncEvent();
+	private long startTime;
 	
 	/**
 	 * Constructor of the train class
 	 * @param id
 	 * @param track
 	 * @param direction
+	 * @param speed in miles per second
 	 */
 	public Train(int id, Track track, String direction, double speed) {
 		super (
@@ -31,10 +36,10 @@ public class Train extends RealtimeThread{
 		this.direction = direction;
 		this.track = track;
 		this.speed = speed;
-		
 		this.lightChangedHandler = new LightChangedHandler(this);
-		
-		// ok create a hangler and pass me in
+		this.DeadlineMissed.addHandler(new DeadlineMissedHandler(this));
+		this.startTimer();
+		this.start();
 	}
 
 	/**
@@ -44,11 +49,17 @@ public class Train extends RealtimeThread{
 		System.out.println("----------------------- \n Train with id: " + 
 				this.id +" has started and is placed on track: "+ this.track.name + 
 				" \n with direction " + this.direction + 
-				"This track length is: " + this.track.distance + " Miles \n -------------------------------" 
+				" This track length is: " + this.track.distance + " Miles \n -------------------------------" 
 		);
+		
 		this.startMoving();
 	}
 	
+	private void startTimer() {
+		this.startTime = System.currentTimeMillis();
+		
+	}
+
 	/**
 	 * 
 	 */
@@ -69,11 +80,16 @@ public class Train extends RealtimeThread{
 	public boolean beforeMoveForward() {
 		
 		if(shouldStop()) {
+			System.out.println("----------------------- \n Train with id: " + 
+					this.id +" has reached its station... ");
+			
+			this.deschedulePeriodic();
 			return false;
+			
 		}
 		
 		if(trafficLightIsGreen()) {
-			System.out.println("Well light is green here");
+			this.checkMissedDealine();
 			lightIsGreen();
 		}
 		
@@ -81,10 +97,33 @@ public class Train extends RealtimeThread{
 		
 	}
 	
+	private void checkMissedDealine() {
+		//check if dealine is missed
+		// if so fire an event
+		
+		long elapsedTime = (new Date()).getTime() - startTime;
+		
+		System.out.println(elapsedTime/ 1000);
+		
+		if(2 * (elapsedTime/ 1000) > this.coveredDistance) {
+			System.out.println("Train is under schedule => Event fired...");
+			DeadlineMissed.fire();
+		}else {
+			this.speed = 2;
+		}
+		
+		
+		
+		
+		
+		
+	}
+
 	public void lightIsGreen() {
 		int indexOfIntersection = nearIntersection();
 		if(indexOfIntersection != -1) {
-			System.out.println("woops we  are near an int");
+			System.out.println("----------------------- \n Train with id: " + 
+					this.id +" has reached an intersection... ");
 			acquireIntersection(indexOfIntersection);
 		}
 		
@@ -99,8 +138,10 @@ public class Train extends RealtimeThread{
 			for (int i = 0; i < this.lockedIntersections.size(); i++) {
 			    Intersection intersection = this.lockedIntersections.get(i);
 			    intersection.release();
+			    System.out.println("------------\n Intersection ("+
+			    		intersection.name +") is now Free...");
 			    this.lockedIntersections.remove(i);
-			    System.out.println("LOL released");
+			    
 			}
 		}
 		
