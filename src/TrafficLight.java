@@ -18,12 +18,11 @@ public class TrafficLight extends RealtimeThread {
 	
 	public TrafficLight(int i) {
 		super (
-				new PriorityParameters(PriorityScheduler.instance().getMinPriority()), 
-				new PeriodicParameters(new RelativeTime((10000 * i),0))
-			);
+			new PriorityParameters(PriorityScheduler.instance().getMinPriority()), 
+			new PeriodicParameters(new RelativeTime((1000 * i),0))
+		);
 		
 		this.id = i;
-		this.turnAllLightsOff();
 		this.start();
 	}
 	
@@ -49,7 +48,7 @@ public class TrafficLight extends RealtimeThread {
 					"----------------------------------------\n"+
 					"Traffic Light with id:" + 
 					this.id + " at the (" + 
-					this.getDirectionName(i) + ") is (green)"
+					this.getDirectionName(i) + ") Direction is (green)"
 			);
 					
 			waitForNextPeriod();
@@ -87,11 +86,7 @@ public class TrafficLight extends RealtimeThread {
 		
 	}
 
-	public void getCurrentActiveLight(int i) {
 
-	}
-	
-	//TODO
 	private void turnAllLightsOff() {
 		this.directions[0] = false;
 		this.directions[1] = false;
@@ -99,7 +94,12 @@ public class TrafficLight extends RealtimeThread {
 		this.directions[3] = false;
 		
 	}
-
+	
+	/**
+	 * 
+	 * @param train
+	 * @return
+	 */
 	public boolean isGreen(Train train) {
 		
 		int index = this.getDirectionIndex(train.direction);

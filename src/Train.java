@@ -97,28 +97,26 @@ public class Train extends RealtimeThread{
 		
 	}
 	
+	/**
+	 * Check if train is running late,
+	 * if so we fire out an event
+	 */
 	private void checkMissedDealine() {
-		//check if dealine is missed
-		// if so fire an event
-		
 		long elapsedTime = (new Date()).getTime() - startTime;
 		
-		System.out.println(elapsedTime/ 1000);
-		
 		if(2 * (elapsedTime/ 1000) > this.coveredDistance) {
-			System.out.println("Train is under schedule => Event fired...");
+			System.out.println("Train with id:"+ this.id +" is under schedule => Deadline Missed Event fired...");
 			DeadlineMissed.fire();
 		}else {
 			this.speed = 2;
 		}
 		
 		
-		
-		
-		
-		
 	}
-
+	
+	/**
+	 * When the light is green, we move forward
+	 */
 	public void lightIsGreen() {
 		int indexOfIntersection = nearIntersection();
 		if(indexOfIntersection != -1) {
